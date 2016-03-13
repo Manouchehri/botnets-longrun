@@ -10,6 +10,9 @@ from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
 
 import celery
+import keyworder
+import images
+import json
 from celery import Celery
 
 # init
@@ -125,6 +128,29 @@ def celery_test():
 @app.route('/')
 def serve_root():
     return redirect('/static/index.html')
+
+@celery.task
+def task_get_images(keyword):
+    return images.get_images(keyword)
+
+@app.route('/api/images', methods=['POST'])
+def get_images():
+    text = request.form['text']
+
+    # Using celery to start multiple tasks to retrieve images
+    keywords = keyworder.get_keywords(text)
+    tasks = []
+    for keyword in keywords:
+        task_id = task_get_images.delay(keyword).task_id
+        tasks.append(task_id)
+
+    # Now get the result of all tasks
+    imgs = []
+    for task_id in tasks:
+        result = task_get_images.AsyncResult(task_id).get()
+        imgs.append(result)
+
+    return json.dumps(imgs)
 
 
 
