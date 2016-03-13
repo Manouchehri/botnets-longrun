@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from flask import Flask, abort, request, jsonify, g, url_for
+from flask import Flask, abort, request, jsonify, g, url_for, redirect
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.httpauth import HTTPBasicAuth
 from passlib.apps import custom_app_context as pwd_context
@@ -121,6 +121,10 @@ def celery_test():
     # Biensur l'idée c'est pas de faire ca de facon synchrone, mais ceci
     # démontre l'utilisation de celery...
     return "Task result: %s" % result.get()
+
+@app.route('/')
+def serve_root():
+    return redirect('/static/index.html')
 
 
 
