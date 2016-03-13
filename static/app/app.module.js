@@ -21,6 +21,5 @@ app.run(function ($rootScope, $location) {
 
 app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
   // initial config here
-  $locationProvider.html5Mode(true);
   $routeProvider.otherwise({redirectTo:'/home'});
 }]);
