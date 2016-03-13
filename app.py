@@ -20,7 +20,11 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['CELERY_BROKER_URL'] = 'sqla+sqlite:///celerydb.sqlite'
 
 # celery
-celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
+celery = Celery(
+    app.name,
+    broker=app.config['CELERY_BROKER_URL'],
+    backend='db+sqlite:///results.sqlite',
+)
 celery.conf.update(app.config)
 
 # extensions
@@ -105,15 +109,18 @@ def get_resource():
 
 @celery.task
 def celery_test_task(word):
-    print "LOL: %s" % word
-    print "LOL: %s" % word
-    print "LOL: %s" % word
+    return "Hello: %s" % word
 
 
 @app.route('/api/celerytest')
 def celery_test():
-    celery_test_task.delay("allo")
-    return "Started task"
+    # Partir la task...
+    task_id = celery_test_task.delay("world").task_id
+    # Fetch le résultat
+    result = celery_test_task.AsyncResult(task_id)
+    # Biensur l'idée c'est pas de faire ca de facon synchrone, mais ceci
+    # démontre l'utilisation de celery...
+    return "Task result: %s" % result.get()
 
 
 

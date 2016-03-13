@@ -1,4 +1,5 @@
 env
 db.sqlite
 celerydb.sqlite
+results.sqlite
 *.pyc
