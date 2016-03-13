@@ -7,14 +7,14 @@ app.constant('GLOBAL_CONFIG', {
 app.run(function ($rootScope, $location) {
 
 	$rootScope.$on("$routeChangeStart", function (event, toState, toParams) {
-		var requireLogin = toState.data.requireLogin;
+		/*var requireLogin = toState.data.requireLogin;
 		if($rootScope.globals) {
 			if (requireLogin && typeof $rootScope.globals.currentUser === 'undefined') {
 	      		$location.path( "/login");
 	    	}
     	} else if(requireLogin){
     		$location.path( "/login");
-    	}
+    	} */
 	});
 
 });
