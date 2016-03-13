@@ -21,3 +21,8 @@ body {
 ul {
     list-style-type: none;
 }
+
+textarea
+{
+  height:70%;
+}

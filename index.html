@@ -8,6 +8,10 @@
 		  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.js"></script>  
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-resource.min.js"></script>
+      <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-cookies.js"></script>
+
+       <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+       
 
       <!-- bootstrap -->
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
@@ -23,11 +27,11 @@
       <base href="/">
   </head>
   <body>
-    <marketing-menu></marketing-menu>
-    	<div class="container" ng-view></div>
+      <marketing-menu></marketing-menu>
+   <div> 	
+   <div ng-view></div>
       <marketing-footer></marketing-footer>
-
-      
+      </div> 
     	<!-- app files -->
     	<script src="app/app.module.js"></script>
     	<script src="app/app.routes.js"></script>
@@ -38,9 +42,10 @@
 
 		  <!-- controllers -->
 		  <script src="app/components/home/homeController.js"></script>
-      <script src="app/components/extra/extraController.js"></script>
+      <script src="app/shared/login/loginController.js"></script>
 
-		  
+      <!-- services -->
+		  <script src="app/shared/services/services.js"></script>
 
 		  <!-- services -->
   </body>
