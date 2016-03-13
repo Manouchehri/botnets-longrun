@@ -9,11 +9,19 @@ from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
 
+import celery
+from celery import Celery
+
 # init
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'the quick brown fox jumps over the lazy dog'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+app.config['CELERY_BROKER_URL'] = 'sqla+sqlite:///celerydb.sqlite'
+
+# celery
+celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
+celery.conf.update(app.config)
 
 # extensions
 db = SQLAlchemy(app)
@@ -94,6 +102,19 @@ def get_user(username):
 @auth.login_required
 def get_resource():
     return jsonify({'data': 'Hello, %s!' % g.user.username})
+
+@celery.task
+def celery_test_task(word):
+    print "LOL: %s" % word
+    print "LOL: %s" % word
+    print "LOL: %s" % word
+
+
+@app.route('/api/celerytest')
+def celery_test():
+    celery_test_task.delay("allo")
+    return "Started task"
+
 
 
 if __name__ == '__main__':
