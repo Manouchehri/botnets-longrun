@@ -1,16 +1,11 @@
-<html ng-app="marketingApp">
+<html>
   <head>
       <!-- Don't use minified version for now since it "hides" the error description -->
 
 
       <!-- angular -->
   		<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-		  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
-      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.js"></script>
-      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-resource.min.js"></script>
-      <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-cookies.js"></script>
-
-       <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+      <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 
 
       <!-- bootstrap -->
@@ -25,28 +20,100 @@
       <link rel="stylesheet" href="assets/css/index.css">
 
       <base href="/">
+      <style>
+      #imagesrepo img
+      {
+          width: 50px;
+          height: 50px;
+      }
+      </style>
   </head>
   <body>
-      <marketing-menu></marketing-menu>
-   <div>
-   <div ng-view></div>
-      <marketing-footer></marketing-footer>
+    <!-- Large modal -->
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Login</h4>
       </div>
-    	<!-- app files -->
-    	<script src="static/app/app.module.js"></script>
-    	<script src="static/app/app.routes.js"></script>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="loginButton">Login</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-      <!-- directives -->
-      <script src="static/app/shared/footer/footerDirective.js"></script>
-      <script src="static/app/shared/menu/menuDirective.js"></script>
+    <div>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">BotnETS Marketing AI</a>
+    </div>
+    <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">
+Login</button>
 
-	  <!-- controllers -->
-	  <script src="static/app/components/home/homeController.js"></script>
-      <script src="static/app/shared/login/loginController.js"></script>
+  </div>
+</nav>
+</div>
+<div class="container-fluid">
+  <div class="col-sm-8">
+    <textarea id="editor"></textarea>
+  </div>
+  <div class="col-sm-4">
+    <div class="col-sm-6 col-md-3" id="imagesrepo">
+     
+    </div>
+  </div>
+  <script>tinymce.init({ selector:'textarea' ,
+    plugins: [
+        "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker",
+        "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+        "save table contextmenu directionality emoticons template textcolor paste fullpage textcolor colorpicker"
+    ],
+'elementpath': false,
+paste_data_images: true,
+setup: function(ed) {
+  ed.on('change', function(e) {
+    editorUpdate(ed.getContent()); 
 
-      <!-- services -->
-	  <script src="static/app/shared/services/services.js"></script>
+  });
 
-	  <!-- services -->
+}
+
+
+});</script>
+</div>
+<script>
+ function editorUpdate(text) {
+    var o = new Object()
+    o.text = text;
+    console.log(JSON.stringify(o));
+    $.ajax({
+      type: "POST",
+      url: "/api/images",
+      data: 'text='+o.text,
+      success: function(response)
+      {
+        $imgrepo = $('#imagesrepo');
+        $imgrepo.empty(); 
+
+        response[0].forEach(function(img) {
+          console.log(img.assets.preview.url);
+         $('<img />').attr('src',img.assets.preview.url.replace('https','http')).appendTo($imgrepo);
+
+        });
+
+      },
+      dataType: "json"
+
+    });
+
+ }
+</script>
   </body>
 </html>
