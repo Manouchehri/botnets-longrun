@@ -4,6 +4,6 @@ app.directive('marketingFooter', function() {
   return {
     restrict: 'E',
     replace: true,
-    templateUrl: 'app/shared/footer/footerView.html'
+    templateUrl: 'static/app/shared/footer/footerView.html'
   };
 });
