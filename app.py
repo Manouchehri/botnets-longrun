@@ -88,8 +88,7 @@ def new_user():
     user.hash_password(password)
     db.session.add(user)
     db.session.commit()
-    return (jsonify({'username': user.username}), 201,
-            {'Location': url_for('get_user', id=user.id, _external=True)})
+    return (jsonify({'username': user.username}), 201)
 
 
 @app.route('/api/token')
@@ -134,6 +133,7 @@ def task_get_images(keyword):
     return images.get_images(keyword)
 
 @app.route('/api/images', methods=['POST'])
+@auth.login_required
 def get_images():
     text = request.form['text']
 
