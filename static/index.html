@@ -103,7 +103,6 @@ setup: function(ed) {
         $imgrepo.empty(); 
 
         response[0].forEach(function(img) {
-          console.log(img.assets.preview.url);
          $('<img />').attr('src',img.assets.preview.url.replace('https','http')).appendTo($imgrepo);
 
         });

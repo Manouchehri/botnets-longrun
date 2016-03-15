@@ -17,10 +17,3 @@ def get_keywords(html):
 			keywords.append(k['text'])
 		return keywords
 	return list()
-
-
-
-
-
-if __name__ == "__main__":
-	print get_keywords(urllib.urlopen("http://cognilore.com").read())
